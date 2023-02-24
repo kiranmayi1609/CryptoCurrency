@@ -15,7 +15,7 @@ namespace CryptoCurrency.Data
         public DbSet<User>users { get; set; }
         public DbSet<Price>prices { get; set; }
         public DbSet<Transaction>transactions { get; set; }
-        public DbSet<Coin>coin { get; set; }
+        public DbSet<Coin>coin{ get; set; }
         public DbSet<Wallet>wallets { get; set; }
         public DbSet<TransactionCoin>transactionCoins { get; set; }
 
