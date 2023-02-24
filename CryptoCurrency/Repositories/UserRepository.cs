@@ -52,13 +52,13 @@ namespace CryptoCurrency.Repositories
                 return _Context.SaveChanges() >= 0;
             }
 
-            public bool Authenticate(string Email, string Password)
-            {
-                return _Context.users.Any(u => u.Email == Email && u.Password == Password);
-            }
+        public bool Authenticate(string Email, string Password)
+        {
+            return _Context.users.Any(u => u.Email == Email && u.Password == Password);
+        }
 
-            
-        
+
+
 
     }
 }

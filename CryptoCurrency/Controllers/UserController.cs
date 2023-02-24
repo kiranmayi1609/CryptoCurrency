@@ -21,51 +21,29 @@ namespace CryptoCurrency.Controllers
             _mapper = mapper;
         }
 
-        //[HttpPost("authenticate")]
-        //public IActionResult Authenticate([FromBody] UserDto userobj)
-        //{
-        //    if (userobj == null)
-        //        return BadRequest();
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] UserDto userobj)
+        {
+            if (userobj == null)
+                return BadRequest();
 
-        //    // Find the user by email and password
-        //    var user = _userService.Authenticate(userobj.Email, userobj.Password);
+            // Find the user by email and password
+            var user = _userService.Authenticate(userobj.Email, userobj.Password);
 
-        //    if (user == null)
-        //        return NotFound(new { Message = "User not found" });
-
-
-        //    // Return the token to the client
-        //    return Ok(new
-        //    {
-        //        Message = "Login Success",
-
-        //    });
-        //}
+            if (user == null)
+                return NotFound(new { Message = "User not found" });
 
 
-        //[HttpPost("registration")]
-        //    public IActionResult Register([FromBody] UserDto userobj)
-        //    {
-        //        if (userobj == null)
-        //        {
-        //            return BadRequest(new { message = "User object is null" });
-        //        }
+            // Return the token to the client
+            return Ok(new
+            {
+                Message = "Login Success",
 
-        //        if (_userService.UserExists(userobj.Id))
-        //        {
-        //            return Conflict(new { message = "User with this ID already exists" });
-        //        }
-        //        var user=_mapper.Map<User>(userobj);
+            });
+        }
 
-        //        if (_userService.CreateUser(user))
-        //        {
-        //            return Ok(new { message = "User created successfully" });
-        //        }
-        //        else
-        //        {
-        //            return BadRequest(new { message = "Failed to create user" });
-        //        }
-        //    }
+
+
 
 
         [HttpPost("Registration")]
