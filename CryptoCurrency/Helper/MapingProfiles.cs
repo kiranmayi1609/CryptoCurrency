@@ -11,14 +11,15 @@ namespace CryptoCurrency.Helper
             CreateMap<Coin,CoinDTO>();
             CreateMap<Transaction ,TransactionDto>();
             CreateMap<Price, PriceDto>();
-            CreateMap<UserDto, User>()
+            CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                  .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                  .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
 
-                ;
-                 
+             ;
+            CreateMap<UserDto, User>();
+
 
 
         }

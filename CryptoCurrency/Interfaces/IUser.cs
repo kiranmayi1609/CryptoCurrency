@@ -4,13 +4,23 @@ namespace CryptoCurrency.Interfaces
 {
     public interface IUser
     {
-        ICollection<User> GetUsers();
-        User GetUser(int id);
-        bool UserExists(int id);
-        bool CreateUser(User userobj);
-        bool UpdateUser(User userobj);
-        bool DeleteUser(User userobj);
-        bool Save();
-        bool Authenticate(string Email, string Password);
+        //ICollection<User> GetUsers();
+        //User GetUser(int id);
+
+        //void CreateUser(User userobj);
+        //void UpdateUser(User userobj);
+        //void DeleteUser(User userobj);
+
+       
+            ICollection<User> GetUsers();
+            User GetUser(int id);
+            void CreateUser(User userobj);
+            void UpdateUser(User userobj);
+            void DeleteUser(User userobj);
+            User Authenticate(string email, string password);
+       
+
+
+
     }
 }

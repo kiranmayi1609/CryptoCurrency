@@ -20,61 +20,156 @@ namespace CryptoCurrency.Controllers
             _userService = userservice;
             _mapper = mapper;
         }
-
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserDto userobj)
+        [HttpGet]
+        public IActionResult Get()
         {
-            if (userobj == null)
-                return BadRequest();
+            var users = _userService.GetUsers();
+            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
 
-            // Find the user by email and password
-            var user = _userService.Authenticate(userobj.Email, userobj.Password);
+            return Ok(userDtos);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var user = _userService.GetUser(id);
 
             if (user == null)
-                return NotFound(new { Message = "User not found" });
-
-
-            // Return the token to the client
-            return Ok(new
             {
-                Message = "Login Success",
+                return NotFound();
+            }
 
-            });
+            var userDto = _mapper.Map<UserDto>(user);
+
+            return Ok(userDto);
         }
 
-
-
-
-
-        [HttpPost("Registration")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult CreateUser([FromBody] UserDto userobj)
+        [HttpPost]
+        public IActionResult Post([FromBody] UserDto userDto)
         {
-            if (userobj == null)
-                return BadRequest(ModelState);
-
-            var existingUser = _userService.GetUsers()
-                .Where(x => x.Id == userobj.Id).FirstOrDefault();
-
-            if (existingUser != null)
+            if (userDto== null)
             {
-                ModelState.AddModelError("", " user with this first name already exists ");
-                return StatusCode(422, ModelState);
+                return BadRequest();
             }
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var user = _mapper.Map<User>(userDto);
 
-            var UserMap = _mapper.Map<User>(userobj);
+            _userService.CreateUser(user);
 
-            if (!_userService.CreateUser(UserMap))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving");
-                return StatusCode(500, ModelState);
-            }
-
-            return Ok("Successfully created");
+            return Ok();
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] UserDto userDto)
+        {
+            if (userDto == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _userService.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(user, userDto);
+
+            _userService.UpdateUser(user);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var user = _userService.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _userService.DeleteUser(user);
+
+            return Ok();
+        }
+
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] UserDto userDto)
+        {
+            var user = _userService.Authenticate(userDto.Email, userDto.Password);
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "Email or password is incorrect" });
+            }
+
+            // Remove the password from the user object to avoid exposing it
+            user.Password = null;
+
+            return Ok(user);
+        }
+
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] UserDto userDto)
+        {
+            if (userDto == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _mapper.Map<User>(userDto);
+
+            // You may want to validate the user input before creating a new user
+
+            _userService.CreateUser(user);
+
+            // Remove the password from the user object to avoid exposing it
+            user.Password = null;
+            return Ok(new { message = "", user = user });
+
+
+
+        }
+
+
+        //[HttpPost("register")]
+        //public IActionResult Register([FromBody] UserDto userDto)
+        //{
+        //    // Validate user input
+        //    if (string.IsNullOrWhiteSpace(userDto.Email) || string.IsNullOrWhiteSpace(userDto.Password))
+        //    {
+        //        return BadRequest(new { message = "Email and password are required" });
+        //    }
+
+        //    // Check if user already exists
+        //    if (_userService.GetUserByEmail(userDto.Email) != null)
+        //    {
+        //        return BadRequest(new { message = "Email is already registered" });
+        //    }
+
+        //    // Map the UserDto to a User object
+        //    var user = _mapper.Map<User>(userDto);
+
+        //    //// Hash the password before storing it in the database
+        //    //user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+        //    // Add the user to the database
+        //    _userService.CreateUser(user);
+
+        //    // Remove the password from the user object to avoid exposing it
+        //    user.Password = null;
+
+        //    return Ok(user);
+        //}
+
+
+
+
+
+
+
     }
 }
