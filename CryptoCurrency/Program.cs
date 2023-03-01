@@ -19,6 +19,19 @@ builder.Services.AddScoped<IUser, UserRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// client configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+      "CorsPolicy",
+      builder => builder.WithOrigins("http://localhost:4200")
+      .AllowAnyMethod()
+      .AllowAnyHeader()
+      .AllowCredentials());
+});
+
+
+
 //Add dabase service configuration
 builder.Services.AddDbContext<CryptoDbContext>(options =>
 {
@@ -48,10 +61,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

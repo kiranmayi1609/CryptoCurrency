@@ -62,10 +62,6 @@ namespace CryptoCurrency.Data
            
         }
 
-
-
-        
-
-
+       
     }
 }
