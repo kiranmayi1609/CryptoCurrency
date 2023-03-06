@@ -97,19 +97,24 @@ namespace CryptoCurrency.Controllers
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserDto userDto)
+        public IActionResult Authenticate([FromBody] LoginDto userDto)
         {
             var user = _userService.Authenticate(userDto.Email, userDto.Password);
 
-            if (user == null)
+            if (user == null || user.Password != userDto.Password)
             {
-                return BadRequest(new { message = "Email or password is incorrect" });
+                return BadRequest(new { message = "Invalid Credentials" });
             }
+            // Set session variable to mark user as authenticated
+            //HttpContext.Session.SetInt32("UserId", user.Id);
 
             // Remove the password from the user object to avoid exposing it
-            user.Password = null;
+            //user.Password = null;
+            return Ok(new
+            {
+                message = "Login successful"
+            });
 
-            return Ok(user);
         }
 
         [HttpPost("register")]

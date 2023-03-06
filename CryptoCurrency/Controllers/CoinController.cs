@@ -65,8 +65,30 @@ namespace CryptoCurrency.Controllers
 
             return NoContent();
         }
+       [HttpDelete("{id}")]
+       public IActionResult DeleteCoin(int id)
+       {
+           var coin = _coinService.GetCoin(id);
+
+                if (coin == null)
+                {
+                    return NotFound();
+                }
+
+           var deletedCoin = _coinService.DeleteCoin(coin);
+
+             if (!deletedCoin)
+             {
+                    return StatusCode(500, "A problem happened while handling your request.");
+             }
+
+           return NoContent();
+       }
+    }
 
 
 
 
-}   } 
+
+}
+

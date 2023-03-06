@@ -20,15 +20,24 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // client configuration
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(
-      "CorsPolicy",
-      builder => builder.WithOrigins("http://localhost:4200")
-      .AllowAnyMethod()
-      .AllowAnyHeader()
-      .AllowCredentials());
+    options.AddPolicy("CorsPolicy",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(
+//      "CorsPolicy",
+//      builder => builder.WithOrigins("http://localhost:4200")
+//      .AllowAnyMethod()
+//      .AllowAnyHeader()
+//      .AllowCredentials());
+//});
 
 
 
