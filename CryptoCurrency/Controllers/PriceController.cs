@@ -50,7 +50,7 @@ namespace CryptoCurrency.Controllers
                 return NotFound();
             }
 
-            var deletedCoin = _PriceService.(coin);
+            var deletedCoin = _PriceService.DeletePrice(coin);
 
             if (!deletedCoin)
             {

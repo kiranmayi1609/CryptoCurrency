@@ -19,6 +19,7 @@ namespace CryptoCurrency.Helper
 
              ;
             CreateMap<UserDto, User>();
+            CreateMap<WalletDto, Wallet>();
 
 
 
