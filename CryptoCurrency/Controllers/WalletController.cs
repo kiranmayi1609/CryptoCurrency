@@ -38,7 +38,7 @@ namespace CryptoCurrency.Controllers
             public ActionResult<IEnumerable<WalletDto>> GetAll()
             {
                 var wallets = _walletService.GetAll();
-                var walletDtos = _mapper.Map<IEnumerable<WalletDto>>(wallets);
+                var walletDtos = _mapper.Map<IEnumerable<Wallet>>(wallets);
                 return Ok(walletDtos);
             }
 
@@ -57,7 +57,7 @@ namespace CryptoCurrency.Controllers
             {
                 var wallet = _mapper.Map<Wallet>(walletCreateDto);
                 _walletService.Create(wallet);
-                var walletDto = _mapper.Map<WalletDto>(wallet);
+                var walletDto = _mapper.Map<Wallet>(wallet);
                 return CreatedAtAction(nameof(GetById), new { id = walletDto.Id }, walletDto);
             }
             catch (Exception ex)

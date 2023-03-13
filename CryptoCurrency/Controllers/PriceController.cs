@@ -59,5 +59,58 @@ namespace CryptoCurrency.Controllers
 
             return NoContent();
         }
+
+        [HttpPost]
+        public IActionResult CreatePrice([FromBody] PriceDto priceDto)
+        {
+
+            
+           if (priceDto == null)
+           {
+                    return BadRequest();
+           }
+
+           var price = _mapper.Map<Price>(priceDto);
+
+           _PriceService.CreatePrice(price);
+
+            return Ok();
+        }
+       
+        [HttpPut("{id}")]
+        public IActionResult UpdatePrice(int id, [FromBody] PriceDto priceDto)
+        {
+            if (priceDto == null)
+            {
+                return BadRequest();
+            }
+
+            var price = _PriceService.GetPrice(id);
+
+            if (price == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(priceDto, price);
+
+            var priceExists = _PriceService.PriceExists(price.CoinId);
+
+            if (!priceExists)
+            {
+                return NotFound("The specified coin does not exist.");
+            }
+
+            var updated = _PriceService.UpdatePrice(price);
+
+            if (!updated)
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return NoContent();
+        }
+
+
     }
 }

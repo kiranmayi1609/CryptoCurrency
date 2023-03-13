@@ -56,7 +56,7 @@ namespace CryptoCurrency.Repositories
 
         public bool UpdatePrice(Price price)
         {
-            throw new NotImplementedException();
+           return _dbContext.prices.Where(p=>p.Id==price.Id).Any();
         }
     }
 }

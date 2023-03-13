@@ -53,7 +53,7 @@ namespace CryptoCurrency.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult CreateCoin([FromQuery] int transactionId, [FromBody] TransactionDto  coinCreate)
+        public IActionResult CreateCoin([FromQuery] int transactionId, [FromBody] CoinDTO coinCreate)
         {
             if (coinCreate == null)
             {
@@ -84,6 +84,34 @@ namespace CryptoCurrency.Controllers
 
            return NoContent();
        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCoin(int id, [FromBody] CoinDTO coinDto)
+        {
+            if (coinDto == null)
+            {
+                return BadRequest();
+            }
+
+            var coin = _coinService.GetCoin(id);
+
+            if (coin == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(coin, coinDto);
+
+            var updated = _coinService.UpdateCoin(id, coin);
+
+            if (!updated)
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return Ok();
+        }
+
     }
 
 

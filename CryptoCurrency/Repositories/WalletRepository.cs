@@ -31,6 +31,7 @@ namespace CryptoCurrency.Repositories
 
         public void Update(Wallet wallet)
         {
+           
          _Context.wallets.Update(wallet);
          _Context.SaveChanges();
         }
