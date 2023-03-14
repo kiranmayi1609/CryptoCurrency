@@ -9,10 +9,11 @@ namespace CryptoCurrency.Interfaces
         Coin GetCoin (string name);
        
         bool CoinExists(int coinId);
-        bool CreateCoin(int  transactionId,int coinId, Coin coin);
+        bool CreateCoin( Coin coin);
         bool UpdateCoin(int transactionId,Coin coin);
         bool DeleteCoin(Coin coin);
         bool Save();
-
+       
+        
     }
 }

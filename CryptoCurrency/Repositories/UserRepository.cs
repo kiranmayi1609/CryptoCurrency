@@ -1,6 +1,7 @@
 ﻿using CryptoCurrency.Data;
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CryptoCurrency.Repositories
 {
@@ -97,6 +98,17 @@ namespace CryptoCurrency.Repositories
             }
 
             return user;
+        }
+
+        public IEnumerable<Transaction> GetUserTransactions(int userId)
+        {
+            return _Context.transactions
+                .Include(t => t.User)
+                .Include(t => t.TransactionCoins)
+                    .ThenInclude(tc => tc.Coin)
+                    .ThenInclude(c => c.Prices)
+                .Where(t => t.UserId == userId)
+                .ToList();
         }
 
 

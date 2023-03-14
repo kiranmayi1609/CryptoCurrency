@@ -170,6 +170,18 @@ namespace CryptoCurrency.Controllers
         //    return Ok(user);
         //}
 
+        [HttpGet("{userId}/transactions")]
+        public IActionResult GetUserTransactions(int userId)
+        {
+            var transactions = _userService.GetUserTransactions(userId);
+
+            if (transactions == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transactions);
+        }
 
 
 

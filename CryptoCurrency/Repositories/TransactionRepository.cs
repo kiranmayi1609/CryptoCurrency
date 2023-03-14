@@ -11,6 +11,13 @@ namespace CryptoCurrency.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public void AddTransaction(Transaction transaction)
+        {
+            _dbContext.transactions.Add(transaction);
+            _dbContext.SaveChanges();
+        }
+
         public Transaction GetTransaction(int id)
         {
             return _dbContext.transactions.Where(t => t.Id == id).FirstOrDefault();
@@ -30,6 +37,12 @@ namespace CryptoCurrency.Repositories
         public bool TransactionExists(int Id)
         {
             return _dbContext.transactions.Any(x => x.Id == Id);
+        }
+
+        public void UpdateTransaction(Transaction transaction)
+        {
+            _dbContext.transactions.Update(transaction);
+            _dbContext.SaveChanges();
         }
     }
 }

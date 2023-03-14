@@ -9,8 +9,10 @@ namespace CryptoCurrency.Helper
         public MapingProfiles()
         {
             CreateMap<Coin,CoinDTO>();
-            CreateMap<Transaction ,TransactionDto>();
+            CreateMap<CoinDTO,Coin>();
+            CreateMap<TransactionDto,Transaction>();
             CreateMap<PriceDto, Price>();
+            CreateMap<Price,PriceDto>();
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                  .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
@@ -20,6 +22,8 @@ namespace CryptoCurrency.Helper
              ;
             CreateMap<UserDto, User>();
             CreateMap<WalletDto, Wallet>();
+            CreateMap<Wallet, WalletDto>();
+            CreateMap<Transaction, TransactionDto>();
 
 
 

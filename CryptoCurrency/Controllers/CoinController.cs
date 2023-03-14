@@ -49,23 +49,27 @@ namespace CryptoCurrency.Controllers
 
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+   
 
-        public IActionResult CreateCoin([FromQuery] int transactionId, [FromBody] CoinDTO coinCreate)
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCoin([FromBody] CoinDTO coinCreate)
         {
             if (coinCreate == null)
-            {
-                return BadRequest(ModelState);
-            }
-            var filteredCoins = _coinService.GetCoins()
-                .Where(c => c.MarketCap > 1000000);
-            
+                return BadRequest();
 
-            return NoContent();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var coin = _mapper.Map<Coin>(coinCreate);
+
+            _coinService.CreateCoin(coin);
+
+            return CreatedAtAction(nameof(GetCoin), new { coinId = coin.Id }, coin);
         }
-       [HttpDelete("{id}")]
+        
+        [HttpDelete("{id}")]
        public IActionResult DeleteCoin(int id)
        {
            var coin = _coinService.GetCoin(id);

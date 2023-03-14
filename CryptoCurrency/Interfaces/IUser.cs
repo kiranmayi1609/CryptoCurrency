@@ -18,7 +18,9 @@ namespace CryptoCurrency.Interfaces
             void UpdateUser(User userobj);
             void DeleteUser(User userobj);
             User Authenticate(string email, string password);
-       
+            IEnumerable<Transaction> GetUserTransactions(int userId);
+
+
 
 
 
