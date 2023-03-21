@@ -102,14 +102,28 @@ namespace CryptoCurrency.Repositories
 
         public IEnumerable<Transaction> GetUserTransactions(int userId)
         {
-            return _Context.transactions
-                .Include(t => t.User)
-                .Include(t => t.TransactionCoins)
-                    .ThenInclude(tc => tc.Coin)
-                    .ThenInclude(c => c.Prices)
-                .Where(t => t.UserId == userId)
-                .ToList();
+            throw new NotImplementedException();
         }
+
+        //public IEnumerable<Transaction> GetUserTransactions(int userId)
+        //{
+        //    //working with multiple tables using Linq join 
+
+        //    var userList= from u in _Context.users
+        //                  join ut in _Context.transactions on u.Id equals ut.UserId
+        //                  join uw in _Context.wallets on u.Id equals uw.UserId
+        //                  select new
+        //                  {
+
+        //                  }
+        //    //return _Context.transactions
+        //    //    .Include(t => t.User)
+        //    //    .Include(t => t.TransactionCoins)
+        //    //        .ThenInclude(tc => tc.Coin)
+        //    //        .ThenInclude(c => c.Prices)
+        //    //    .Where(t => t.UserId == userId)
+        //    //    .ToList();
+        //}
 
 
 

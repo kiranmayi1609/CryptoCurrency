@@ -47,7 +47,7 @@ namespace CryptoCurrency.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] UserDto userDto)
         {
-            if (userDto== null)
+            if (userDto == null)
             {
                 return BadRequest();
             }
@@ -101,19 +101,16 @@ namespace CryptoCurrency.Controllers
         {
             var user = _userService.Authenticate(userDto.Email, userDto.Password);
 
-            if (user == null || user.Password != userDto.Password)
+            if (user == null)
             {
-                return BadRequest(new { message = "Invalid Credentials" });
+                return BadRequest(new { message = "Email or password is incorrect" });
             }
             // Set session variable to mark user as authenticated
             //HttpContext.Session.SetInt32("UserId", user.Id);
 
             // Remove the password from the user object to avoid exposing it
             //user.Password = null;
-            return Ok(new
-            {
-                message = "Login successful"
-            });
+            return Ok(user);
 
         }
 
@@ -138,7 +135,8 @@ namespace CryptoCurrency.Controllers
 
 
         }
-
+    }
+}
 
         //[HttpPost("register")]
         //public IActionResult Register([FromBody] UserDto userDto)
@@ -170,23 +168,16 @@ namespace CryptoCurrency.Controllers
         //    return Ok(user);
         //}
 
-        [HttpGet("{userId}/transactions")]
-        public IActionResult GetUserTransactions(int userId)
-        {
-            var transactions = _userService.GetUserTransactions(userId);
+        //[HttpGet("{userId}/transactions")]
+        //public IActionResult GetUserTransactions(int userId)
+        //{
+        //    var transactions = _userService.GetUserTransactions(userId);
 
-            if (transactions == null)
-            {
-                return NotFound();
-            }
+        //    if (transactions == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(transactions);
-        }
-
-
-
-
-
-
-    }
-}
+        //    return Ok(transactions);
+        //}
+        
