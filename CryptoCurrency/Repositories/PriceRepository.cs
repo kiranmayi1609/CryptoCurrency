@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Data;
+using CryptoCurrency.Dto;
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
 
@@ -54,9 +55,22 @@ namespace CryptoCurrency.Repositories
             return _dbContext.prices.Any(p => p.Coin.Id == coinId);
         }
 
-        public bool UpdatePrice(Price price)
+       
+
+        public bool UpdatePrice(int id, UpdatePrice updatePrice)
         {
-           return _dbContext.prices.Where(p=>p.Id==price.Id).Any();
+           var price=_dbContext.prices.Find(id);
+
+            if(price==null)
+            {
+                return false;
+            }
+
+            price.CoinId = updatePrice.CoinId;
+            price.Value = updatePrice.Value;
+
+            _dbContext.SaveChanges();
+            return true;
         }
     }
 }

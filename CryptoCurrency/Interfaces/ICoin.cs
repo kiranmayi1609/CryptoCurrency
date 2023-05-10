@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Models;
+using CryptoCurrency.Dto;
 
 namespace CryptoCurrency.Interfaces
 {
@@ -10,7 +11,7 @@ namespace CryptoCurrency.Interfaces
        
         bool CoinExists(int coinId);
         bool CreateCoin( Coin coin);
-        bool UpdateCoin(int transactionId,Coin coin);
+        bool UpdateCoin(int id,updateCoin update);
         bool DeleteCoin(Coin coin);
         bool Save();
        

@@ -90,13 +90,13 @@ namespace CryptoCurrency.Controllers
        }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCoin(int id, [FromBody] CoinDTO coinDto)
+        public IActionResult UpdateCoin(int id, [FromBody] updateCoin update)
         {
-            if (coinDto == null)
+            if (update==null)
             {
                 return BadRequest();
             }
-
+           
             var coin = _coinService.GetCoin(id);
 
             if (coin == null)
@@ -104,9 +104,16 @@ namespace CryptoCurrency.Controllers
                 return NotFound();
             }
 
-            _mapper.Map(coin, coinDto);
+            //_mapper.Map(coin, coinDto);
+            // Update the coin object with values from the DTO
+            coin.Name = update.Name;
+            coin.Symbol = update.Symbol;
+            coin.MarketCap = update.MarketCap;
+            coin.Volume24h = update.Volume24h;
+            coin.Change24h = update.Change24h;
 
-            var updated = _coinService.UpdateCoin(id, coin);
+
+            var updated = _coinService.UpdateCoin(id, update);
 
             if (!updated)
             {
