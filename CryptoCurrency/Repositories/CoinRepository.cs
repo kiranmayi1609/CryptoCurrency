@@ -18,21 +18,20 @@ namespace CryptoCurrency.Repositories
             return _Context.coin.Any(c=>c.Id == coinId);
         }
 
-        public bool CreateCoin(int transactionId, int coinId, Coin coin)
+        public bool CreateCoin( Coin createCoin)
         {
-            var transactionCoinEntity=_Context. transactions.Where(a=> a.Id == transactionId).FirstOrDefault();
-            var transactionCoin = new TransactionCoin()
-            {
-                Transaction = transactionCoinEntity,
-                Coin = coin,
+            //var transactionCoinEntity=_Context. transactions.Where(a=> a.Id == transactionId).FirstOrDefault();
+            //var transactionCoin = new TransactionCoin()
+            //{
+            //    Transaction = transactionCoinEntity,
+            //    Coin = coin,
 
-            };
-            _Context.Add(transactionCoin);
-            _Context.Add(coin);
+            //};
+                _Context.coin.Add(createCoin);
+                var result = _Context.SaveChanges();
 
-            return Save();
+                return result > 0;
 
-            
         }
 
         public bool DeleteCoin(Coin coin)

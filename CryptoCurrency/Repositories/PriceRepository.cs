@@ -13,6 +13,19 @@ namespace CryptoCurrency.Repositories
             _dbContext = dbContext;
         }
 
+        public bool CreatePrice(Price price)
+        {
+            _dbContext.prices.Add(price);
+            return true;
+            
+           
+        }
+
+        public bool DeletePrice(Price price)
+        {
+            throw new NotImplementedException();
+        }
+
         public ICollection<Coin> GetCoinsFromPrice(int priceId)
         {
             return _dbContext.coin
@@ -39,6 +52,11 @@ namespace CryptoCurrency.Repositories
         public bool PriceExists(int coinId)
         {
             return _dbContext.prices.Any(p => p.Coin.Id == coinId);
+        }
+
+        public bool UpdatePrice(Price price)
+        {
+           return _dbContext.prices.Where(p=>p.Id==price.Id).Any();
         }
     }
 }

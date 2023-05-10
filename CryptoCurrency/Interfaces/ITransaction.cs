@@ -9,5 +9,7 @@ namespace CryptoCurrency.Interfaces
         ICollection<Coin> GetTransactionsByCoins(int transactionID);
        
         bool TransactionExists (int Id);
+        void AddTransaction(Transaction transaction);
+        void UpdateTransaction(Transaction transaction);
     }
 }

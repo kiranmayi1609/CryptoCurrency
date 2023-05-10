@@ -15,20 +15,30 @@ builder.Services.AddScoped<ICoin, CoinRepository>();
 builder.Services.AddScoped<ITransaction, TransactionRepository>();
 builder.Services.AddScoped <IPrice, PriceRepository>();
 builder.Services.AddScoped<IUser, UserRepository>();
+builder.Services.AddScoped<IWallet, WalletRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // client configuration
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(
-      "CorsPolicy",
-      builder => builder.WithOrigins("http://localhost:4200")
-      .AllowAnyMethod()
-      .AllowAnyHeader()
-      .AllowCredentials());
+    options.AddPolicy("CorsPolicy",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(
+//      "CorsPolicy",
+//      builder => builder.WithOrigins("http://localhost:4200")
+//      .AllowAnyMethod()
+//      .AllowAnyHeader()
+//      .AllowCredentials());
+//});
 
 
 

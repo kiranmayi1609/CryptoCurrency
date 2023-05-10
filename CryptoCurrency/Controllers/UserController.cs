@@ -47,7 +47,7 @@ namespace CryptoCurrency.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] UserDto userDto)
         {
-            if (userDto== null)
+            if (userDto == null)
             {
                 return BadRequest();
             }
@@ -97,7 +97,7 @@ namespace CryptoCurrency.Controllers
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserDto userDto)
+        public IActionResult Authenticate([FromBody] LoginDto userDto)
         {
             var user = _userService.Authenticate(userDto.Email, userDto.Password);
 
@@ -105,11 +105,13 @@ namespace CryptoCurrency.Controllers
             {
                 return BadRequest(new { message = "Email or password is incorrect" });
             }
+            // Set session variable to mark user as authenticated
+            //HttpContext.Session.SetInt32("UserId", user.Id);
 
             // Remove the password from the user object to avoid exposing it
-            user.Password = null;
-
+            //user.Password = null;
             return Ok(user);
+
         }
 
         [HttpPost("register")]
@@ -133,7 +135,8 @@ namespace CryptoCurrency.Controllers
 
 
         }
-
+    }
+}
 
         //[HttpPost("register")]
         //public IActionResult Register([FromBody] UserDto userDto)
@@ -165,11 +168,16 @@ namespace CryptoCurrency.Controllers
         //    return Ok(user);
         //}
 
+        //[HttpGet("{userId}/transactions")]
+        //public IActionResult GetUserTransactions(int userId)
+        //{
+        //    var transactions = _userService.GetUserTransactions(userId);
 
+        //    if (transactions == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-
-
-
-
-    }
-}
+        //    return Ok(transactions);
+        //}
+        
