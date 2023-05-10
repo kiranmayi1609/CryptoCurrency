@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Data;
+using CryptoCurrency.Dto;
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
 
@@ -39,10 +40,25 @@ namespace CryptoCurrency.Repositories
             return _dbContext.transactions.Any(x => x.Id == Id);
         }
 
-        public void UpdateTransaction(Transaction transaction)
+        //public void UpdateTransaction(Transaction transaction)
+        //{
+        //    _dbContext.transactions.Update(transaction);
+        //    _dbContext.SaveChanges();
+        //}
+
+        public void UpdateTransaction(int id,  updateTransaction uTransaction)
         {
-            _dbContext.transactions.Update(transaction);
-            _dbContext.SaveChanges();
+            var transaction = _dbContext.transactions.FirstOrDefault(x => x.Id == id);
+            if(transaction != null)
+            {
+                transaction.UserId = uTransaction.UserId;
+                transaction.Date = uTransaction.Date;
+                _dbContext.SaveChanges();
+
+            }
+            
+
+
         }
     }
 }

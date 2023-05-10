@@ -2,6 +2,7 @@
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
 using System.Linq;
+using CryptoCurrency.Dto;
 
 namespace CryptoCurrency.Repositories
 {
@@ -62,10 +63,46 @@ namespace CryptoCurrency.Repositories
             return saved>0? true: false;
         }
 
-        public bool UpdateCoin(int transactionId, Coin coin)
+        //public bool UpdateCoin(int Id, CoinDto coinDto)
+        //{
+        //    var coin=_Context.C
+        //    _Context.Update(coin);
+        //    return Save();
+        //}
+
+        public bool UpdateCoin(int id, CoinDTO coinDto)
         {
-            _Context.Update(coin);
-            return Save();
+            var coin = _Context.coin.FirstOrDefault(x => x.Id == id);
+
+            if (coin == null)
+            {
+                return false;
+            }
+
+            coin.Name = coinDto.Name;
+            coin.MarketCap= coinDto.MarketCap;
+
+            _Context.coin.Update(coin);
+            return _Context.SaveChanges() > 0;
+        }
+
+        public bool UpdateCoin(int id, updateCoin update)
+        {
+            var coins = _Context.coin.Find(id);
+            if(coins!=null)
+            {
+                coins.Name = update.Name;
+                coins.Symbol = update.Symbol;
+                coins.MarketCap= update.MarketCap;
+                coins.Volume24h= update.Volume24h;
+                coins.Change24h= update.Change24h;
+
+                _Context.SaveChanges();
+               
+            }
+            return true;
+
         }
     }
+    
 }

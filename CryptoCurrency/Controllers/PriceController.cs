@@ -78,9 +78,9 @@ namespace CryptoCurrency.Controllers
         }
        
         [HttpPut("{id}")]
-        public IActionResult UpdatePrice(int id, [FromBody] PriceDto priceDto)
+        public IActionResult UpdatePrice(int id, [FromBody] UpdatePrice updatePrice)
         {
-            if (priceDto == null)
+            if (updatePrice == null)
             {
                 return BadRequest();
             }
@@ -92,8 +92,10 @@ namespace CryptoCurrency.Controllers
                 return NotFound();
             }
 
-            _mapper.Map(priceDto, price);
+            price.CoinId = updatePrice.CoinId;
+            price.Value = updatePrice.Value;
 
+           
             var priceExists = _PriceService.PriceExists(price.CoinId);
 
             if (!priceExists)
@@ -101,7 +103,7 @@ namespace CryptoCurrency.Controllers
                 return NotFound("The specified coin does not exist.");
             }
 
-            var updated = _PriceService.UpdatePrice(price);
+            var updated = _PriceService.UpdatePrice(id,updatePrice);
 
             if (!updated)
             {

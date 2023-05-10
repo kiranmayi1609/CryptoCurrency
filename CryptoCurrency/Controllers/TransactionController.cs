@@ -82,25 +82,49 @@ namespace CryptoCurrency.Controllers
         [HttpPut("{transactionId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult UpdateTransaction(int transactionId, [FromBody] TransactionDto transactionDto)
+        //public IActionResult UpdateTransaction(int transactionId, [FromBody] TransactionDto transactionDto)
+        //{
+        //    if (transactionDto == null || transactionId != transactionDto.Id)
+        //        return BadRequest();
+
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    if (!_transactionservice.TransactionExists(transactionId))
+        //        return NotFound();
+
+        //    var transaction = _mapper.Map<Transaction>(transactionDto);
+
+        //    _transactionservice.UpdateTransaction(transaction);
+
+        //    return NoContent();
+        //}
+
+        [HttpPut("{id}")]
+        //public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction uTransaction)
+        //{
+        //    if (uTransaction == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    _transactionservice.UpdateTransaction(id, uTransaction);
+
+        //    return Ok();
+        //}
+       
+        public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction uTransaction)
         {
-            if (transactionDto == null || transactionId != transactionDto.Id)
+            if (uTransaction == null)
+            {
                 return BadRequest();
+            }
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            _transactionservice.UpdateTransaction(id, uTransaction);
 
-            if (!_transactionservice.TransactionExists(transactionId))
-                return NotFound();
-
-            var transaction = _mapper.Map<Transaction>(transactionDto);
-
-            _transactionservice.UpdateTransaction(transaction);
-
-            return NoContent();
+            return Ok();
         }
 
-       
 
 
 

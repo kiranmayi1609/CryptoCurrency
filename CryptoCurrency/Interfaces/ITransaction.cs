@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Models;
+using CryptoCurrency.Dto;
 
 namespace CryptoCurrency.Interfaces
 {
@@ -10,6 +11,6 @@ namespace CryptoCurrency.Interfaces
        
         bool TransactionExists (int Id);
         void AddTransaction(Transaction transaction);
-        void UpdateTransaction(Transaction transaction);
+        void UpdateTransaction(int id, updateTransaction uTransaction);
     }
 }

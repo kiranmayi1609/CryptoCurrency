@@ -6,4 +6,10 @@
         public int CoinId { get; set; }
         public decimal Value { get; set; }
     }
+    public class UpdatePrice
+    {
+        
+        public int CoinId { get; set; }
+        public decimal Value { get; set; }
+    }
 }
