@@ -135,6 +135,16 @@ namespace CryptoCurrency.Controllers
 
 
         }
+
+        [HttpGet("{userId}/transactions")]
+        public ActionResult<IEnumerable<TransactionDto>> GetUserTransactions(int userId)
+        {
+            var transactions = _userService.GetUserTransactions(userId);
+            var transactionDtos = _mapper.Map<IEnumerable<TransactionDto>>(transactions);
+            return Ok(transactionDtos);
+        }
+
+
     }
 }
 
