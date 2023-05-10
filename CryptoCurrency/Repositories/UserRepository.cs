@@ -100,10 +100,20 @@ namespace CryptoCurrency.Repositories
             return user;
         }
 
+       
+
         public IEnumerable<Transaction> GetUserTransactions(int userId)
         {
-            throw new NotImplementedException();
+            var query = from u in _Context.users
+                        join ut in _Context.transactions on u.Id equals ut.UserId
+                        join uw in _Context.wallets on u.Id equals uw.UserId
+                        where u.Id == userId
+                        select ut;
+
+            return query.ToList();
         }
+
+
 
         //public IEnumerable<Transaction> GetUserTransactions(int userId)
         //{
