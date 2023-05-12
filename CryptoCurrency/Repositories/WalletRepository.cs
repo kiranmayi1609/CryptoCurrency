@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Data;
+using CryptoCurrency.Dto;
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
 
@@ -42,7 +43,30 @@ namespace CryptoCurrency.Repositories
            _Context.wallets.Remove(wallet);
            _Context.SaveChanges();
         }
+
+        public void Update(int id,updateWallet uWallet)
+        {
+
+           
+
+
+            var wallet = _Context.wallets.FirstOrDefault(w => w.UserId == uWallet.UserId);
+
+            if (wallet != null)
+            {
+                wallet.UserId = uWallet.UserId;
+                wallet.Balance = uWallet.Balance;
+                _Context.SaveChanges();
+            }
+        }
+
+
+        //public void Update(updateWallet uWallet)
+        //{
+        //    _Context.wallets.Update(uWallet);
+        //    _Context.SaveChanges();
+        //}
     }
 
-    
+
 }

@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Models;
+using CryptoCurrency.Dto;
 
 namespace CryptoCurrency.Interfaces
 {
@@ -15,7 +16,7 @@ namespace CryptoCurrency.Interfaces
             void Create(Wallet wallet);
 
             // Update an existing wallet
-            void Update(Wallet wallet);
+            void Update( int id,updateWallet uWallet);
 
             // Delete a wallet by its ID
             void Delete(int id);

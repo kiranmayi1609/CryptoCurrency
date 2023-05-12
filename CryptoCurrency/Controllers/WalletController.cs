@@ -67,21 +67,62 @@ namespace CryptoCurrency.Controllers
         }
 
 
+        //[HttpPut("{id}")]
+        //    public ActionResult<WalletDto> Update(int id, WalletDto walletUpdateDto)
+        //    {
+        //        var wallet = _walletService.GetById(id);
+        //        if (wallet == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        _mapper.Map(walletUpdateDto, wallet);
+        //        _walletService.Update(wallet);
+        //        var walletDto = _mapper.Map<WalletDto>(wallet);
+        //        return Ok(walletDto);
+        //    }
+
+
+        //[HttpPut("{id}")]
+        //public ActionResult UpdateWallet(int id, [FromBody] updateWallet uWallet)
+        //{
+        //    if (uWallet == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    // Update the wallet
+        //    _walletService.Update(new updateWallet
+        //    {
+        //        UserId = id,
+        //        Balance = uWallet.Balance
+        //    });
+
+        //    return Ok();
+        //}
+
+
         [HttpPut("{id}")]
-            public ActionResult<WalletDto> Update(int id, WalletDto walletUpdateDto)
+        public IActionResult UpdateTransaction(int id, [FromBody] updateWallet uWallet)
+        {
+            if (uWallet == null)
             {
-                var wallet = _walletService.GetById(id);
-                if (wallet == null)
-                {
-                    return NotFound();
-                }
-                _mapper.Map(walletUpdateDto, wallet);
-                _walletService.Update(wallet);
-                var walletDto = _mapper.Map<WalletDto>(wallet);
-                return Ok(walletDto);
+                return BadRequest();
             }
 
-            [HttpDelete("{id}")]
+            try
+            {
+                _walletService.Update(id, uWallet);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log the error and return an appropriate response
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+
+        [HttpDelete("{id}")]
             public ActionResult Delete(int id)
             {
                 var wallet = _walletService.GetById(id);
