@@ -13,11 +13,47 @@ namespace CryptoCurrency.Repositories
             _dbContext = dbContext;
         }
 
-        public void AddTransaction(Transaction transaction)
+        public bool TransactionExists(int transId)
         {
-            _dbContext.transactions.Add(transaction);
-            _dbContext.SaveChanges();
+            return _dbContext.transactions.Any(c => c.Id == transId);
         }
+
+        public bool AddTransaction(Transaction transaction)
+        {
+            //var transactionEntity=_dbContext. transactions.Where(a=> a.Id==transaction.Id).FirstOrDefault();
+            //var transactionCoin = new TransactionCoin()
+            //{
+            //    Transaction = transactionCoinEntity,
+            //    Coin = coin,
+
+            //};
+            var result = 0;
+            Transaction s = _dbContext.transactions.Where(c => c.Id == transaction.Id).FirstOrDefault();
+            if (s != null)
+            {
+                s.UserId= transaction.UserId;
+                s.Date= transaction.Date;
+
+                result = _dbContext.SaveChanges();
+            }
+            else
+            {
+                _dbContext.transactions.Add(transaction);
+                result = _dbContext.SaveChanges();
+
+            }
+
+
+
+            return result > 0;
+
+        }
+
+        //public void AddTransaction(Transaction transaction)
+        //{
+        //    _dbContext.transactions.Add(transaction);
+        //    _dbContext.SaveChanges();
+        //}
 
         public Transaction GetTransaction(int id)
         {
@@ -35,10 +71,7 @@ namespace CryptoCurrency.Repositories
            return _dbContext.transactionCoins.Where(tc=>tc.TransactionId==transactionID).Select(c=>c.Coin).ToList();
         }
 
-        public bool TransactionExists(int Id)
-        {
-            return _dbContext.transactions.Any(x => x.Id == Id);
-        }
+      
 
         //public void UpdateTransaction(Transaction transaction)
         //{
@@ -46,19 +79,48 @@ namespace CryptoCurrency.Repositories
         //    _dbContext.SaveChanges();
         //}
 
-        public void UpdateTransaction(int id,  updateTransaction uTransaction)
-        {
-            var transaction = _dbContext.transactions.FirstOrDefault(x => x.Id == id);
-            if(transaction != null)
-            {
-                transaction.UserId = uTransaction.UserId;
-                transaction.Date = uTransaction.Date;
-                _dbContext.SaveChanges();
+        //public void UpdateTransaction(int id,  updateTransaction uTransaction)
+        //{
+        //    var transaction = _dbContext.transactions.FirstOrDefault(x => x.Id == id);
+        //    if(transaction != null)
+        //    {
+        //        transaction.UserId = uTransaction.UserId;
+        //        transaction.Date = uTransaction.Date;
+        //        _dbContext.SaveChanges();
 
-            }
+        //    }
             
 
 
+        //}
+
+        public bool UpdateTransaction(int id, updateTransaction update)
+        {
+            var transaction = _dbContext.transactions.Find(id);
+
+            //var coins = _dbContext.coin.Find(id);
+            if (transaction != null)
+            {
+                transaction.UserId = update.UserId;
+                transaction.Date = update.Date;
+                _dbContext.SaveChanges();
+
+            }
+            return true;
+
+        }
+
+        public bool Save()
+        {
+        var saved = _dbContext.SaveChanges();
+        return saved > 0 ? true : false;
+        }
+
+        public void Delete(int id)
+        {
+            var transaction= GetTransaction(id);
+            _dbContext.transactions.Remove(transaction);
+            _dbContext.SaveChanges();
         }
     }
 }

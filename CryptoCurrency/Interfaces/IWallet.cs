@@ -12,15 +12,24 @@ namespace CryptoCurrency.Interfaces
             // Get all wallets
             IEnumerable<Wallet> GetAll();
 
-            // Create a new wallet
-            void Create(Wallet wallet);
+        // Create a new wallet
+        //void Create(Wallet wallet);
+       bool walletExists(int walletId);
 
-            // Update an existing wallet
-            void Update( int id,updateWallet uWallet);
+        bool CreateWallet(Wallet wall);
 
-            // Delete a wallet by its ID
-            void Delete(int id);
-        
+        // Update an existing wallet
+        //void Update( int id,updateWallet uWallet);
+
+        //void Update( Wallet wallet );
+
+        bool UpdateWallet(int id, updateWallet update);
+
+        // Delete a wallet by its ID
+        void Delete(int id);
+
+        bool Save();
+
 
 
 
