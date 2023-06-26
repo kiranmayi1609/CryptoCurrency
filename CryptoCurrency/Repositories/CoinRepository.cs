@@ -28,8 +28,26 @@ namespace CryptoCurrency.Repositories
             //    Coin = coin,
 
             //};
+            var result = 0;
+            Coin s=_Context.coin.Where(c=>c.Id==createCoin.Id).FirstOrDefault();
+            if(s!=null)
+            {
+                s.Name = createCoin.Name;
+                s.MarketCap = createCoin.MarketCap;
+                s.Change24h = createCoin.Change24h;
+                s.Volume24h = createCoin.Volume24h;
+                s.Symbol=createCoin.Symbol;
+
+                result = _Context.SaveChanges();
+            }
+            else
+            {
                 _Context.coin.Add(createCoin);
-                var result = _Context.SaveChanges();
+                 result = _Context.SaveChanges();
+
+            }
+               
+               
 
                 return result > 0;
 
@@ -70,21 +88,21 @@ namespace CryptoCurrency.Repositories
         //    return Save();
         //}
 
-        public bool UpdateCoin(int id, CoinDTO coinDto)
-        {
-            var coin = _Context.coin.FirstOrDefault(x => x.Id == id);
+        //public bool UpdateCoin(int id, CoinDTO coinDto)
+        //{
+        //    var coin = _Context.coin.FirstOrDefault(x => x.Id == id);
 
-            if (coin == null)
-            {
-                return false;
-            }
+        //    if (coin == null)
+        //    {
+        //        return false;
+        //    }
 
-            coin.Name = coinDto.Name;
-            coin.MarketCap= coinDto.MarketCap;
+        //    coin.Name = coinDto.Name;
+        //    coin.MarketCap= coinDto.MarketCap;
 
-            _Context.coin.Update(coin);
-            return _Context.SaveChanges() > 0;
-        }
+        //    _Context.coin.Update(coin);
+        //    return _Context.SaveChanges() > 0;
+        //}
 
         public bool UpdateCoin(int id, updateCoin update)
         {

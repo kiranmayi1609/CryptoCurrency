@@ -16,15 +16,43 @@ namespace CryptoCurrency.Repositories
 
         public bool CreatePrice(Price price)
         {
-            _dbContext.prices.Add(price);
-            return true;
+
+            var result = 0;
+            Price p = _dbContext.prices.Where(c => c.Id == price.Id).FirstOrDefault();
+            if (p!= null)
+            {
+                //p.Id = price.Id;
+                p.CoinId = price.CoinId;
+                p.Value = price.Value;
+                result = _dbContext.SaveChanges();
+            }
+            else
+            {
+                _dbContext.prices.Add(price);
+                result = _dbContext.SaveChanges();
+
+            }
+
+
+
+            return result > 0;
+            //_dbContext.prices.Add(price);
+            //return true;
             
            
         }
 
         public bool DeletePrice(Price price)
         {
-            throw new NotImplementedException();
+            _dbContext.Remove(price);
+            return Save();
+        }
+
+        
+        public bool Save()
+        {
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
         }
 
         public ICollection<Coin> GetCoinsFromPrice(int priceId)

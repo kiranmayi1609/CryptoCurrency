@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using CryptoCurrency.Models;
 using CryptoCurrency.Dto;
 
+
 namespace CryptoCurrency.Controllers
 {
     [Route("api/[controller]")]
@@ -62,33 +63,86 @@ namespace CryptoCurrency.Controllers
                 return BadRequest(ModelState);
 
             var transaction = _mapper.Map<Transaction>(transactionDto);
+            // Set the DateTime property based on the date string
+            //transaction.Date = DateTime.Parse(transactionDto.Date);
 
             _transactionservice.AddTransaction(transaction);
 
             return CreatedAtAction(nameof(GetTransaction), new { transactionId = transaction.Id }, transaction);
         }
 
+
         
 
+
+
+
+        //[HttpPut("{id}")]
+        //public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction uTransaction)
+        //{
+        //    if (uTransaction == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    try
+        //    {
+        //        _transactionservice.UpdateTransaction(id, uTransaction);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the error and return an appropriate response
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
+        //}
+
         [HttpPut("{id}")]
-        public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction uTransaction)
+        public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction update)
         {
-            if (uTransaction == null)
+            if (update == null)
             {
                 return BadRequest();
             }
 
-            try
+            var tr = _transactionservice.GetTransaction(id);
+
+            if (tr == null)
             {
-                _transactionservice.UpdateTransaction(id, uTransaction);
-                return Ok();
+                return NotFound();
             }
-            catch (Exception ex)
+
+            //_mapper.Map(coin, coinDto);
+            // Update the coin object with values from the DTO
+            tr.UserId = update.UserId;
+            tr.Date = update.Date;
+            
+
+
+            var updated = _transactionservice.UpdateTransaction(id, update);
+
+            if (!updated)
             {
-                // Log the error and return an appropriate response
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(500, "A problem happened while handling your request.");
             }
+
+            return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            var tr = _transactionservice.GetTransaction(id);
+            if (tr == null)
+            {
+                return NotFound();
+            }
+            _transactionservice.Delete(id);
+            return NoContent();
+        }
+
+
+
 
 
 

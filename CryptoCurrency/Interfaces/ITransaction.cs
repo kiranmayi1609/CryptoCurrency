@@ -8,9 +8,15 @@ namespace CryptoCurrency.Interfaces
         ICollection<Transaction>GetTransactions();
         Transaction GetTransaction(int id);
         ICollection<Coin> GetTransactionsByCoins(int transactionID);
-       
+
+        bool AddTransaction(Transaction transaction);
+        bool UpdateTransaction(int id, updateTransaction update);
+        bool Save();
+
         bool TransactionExists (int Id);
-        void AddTransaction(Transaction transaction);
-        void UpdateTransaction(int id, updateTransaction uTransaction);
+
+        void Delete(int id);
+        //void AddTransaction(Transaction transaction);
+        //void UpdateTransaction(int id, updateTransaction uTransaction);
     }
 }

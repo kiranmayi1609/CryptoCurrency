@@ -51,21 +51,41 @@ namespace CryptoCurrency.Controllers
         //    return CreatedAtAction(nameof(GetById), new { id = walletDto.Id }, walletDto);
         //}
 
-        public ActionResult<WalletDto> Create(WalletDto walletCreateDto)
-        {
-            try
-            {
-                var wallet = _mapper.Map<Wallet>(walletCreateDto);
-                _walletService.Create(wallet);
-                var walletDto = _mapper.Map<Wallet>(wallet);
-                return CreatedAtAction(nameof(GetById), new { id = walletDto.Id }, walletDto);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred while creating the wallet: {ex.Message}");
-            }
-        }
+        //public ActionResult<WalletDto> Create(WalletDto walletCreateDto)
+        //{
+        //    try
+        //    {
+        //        var wallet = _mapper.Map<Wallet>(walletCreateDto);
+        //        _walletService.Create(wallet);
+        //        var walletDto = _mapper.Map<Wallet>(wallet);
+        //        return CreatedAtAction(nameof(GetById), new { id = walletDto.Id }, walletDto);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"An error occurred while creating the wallet: {ex.Message}");
+        //    }
+        //}
 
+
+
+
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateWallet([FromBody] WalletDto walletCreate)
+        {
+            if (walletCreate == null)
+                return BadRequest();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var wallet = _mapper.Map<Wallet>(walletCreate);
+
+            _walletService.CreateWallet(wallet);
+
+            return CreatedAtAction(nameof(GetAll), new { walletId = wallet.Id }, wallet);
+        }
 
         //[HttpPut("{id}")]
         //    public ActionResult<WalletDto> Update(int id, WalletDto walletUpdateDto)
@@ -82,44 +102,73 @@ namespace CryptoCurrency.Controllers
         //    }
 
 
+
+        //public IActionResult UpdateWallet(int id, [FromBody] updateWallet uWallet)
+        //{
+        //    if(id!=uWallet.UserId)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    try
+        //    {
+        //        var wallet =_walletService.GetById(id);
+        //        if(wallet==null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        //update the wallet properties 
+        //        wallet.UserId=uWallet.UserId;
+        //        wallet.Balance=uWallet.Balance;
+
+        //        _walletService.Update(wallet);
+        //        return Ok();
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
+
+        //    //if (id! == uWallet.UserId)
+        //    //{
+        //    //    return BadRequest();
+        //    //}
+
+        //    //try
+        //    //{
+        //    //    _walletService.Update(id, uWallet);
+        //    //    return Ok();
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    // Log the error and return an appropriate response
+        //    //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    //}
+
+        //    // Update the wallet
+
+        //}
+
+
         //[HttpPut("{id}")]
-        //public ActionResult UpdateWallet(int id, [FromBody] updateWallet uWallet)
+        //public IActionResult UpdateTransaction(int id, [FromBody] updateWallet uWallet)
         //{
         //    if (uWallet == null)
         //    {
         //        return BadRequest();
         //    }
 
-        //    // Update the wallet
-        //    _walletService.Update(new updateWallet
+        //    try
         //    {
-        //        UserId = id,
-        //        Balance = uWallet.Balance
-        //    });
-
-        //    return Ok();
+        //        _walletService.Update(id, uWallet);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the error and return an appropriate response
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        //    }
         //}
-
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateTransaction(int id, [FromBody] updateWallet uWallet)
-        {
-            if (uWallet == null)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                _walletService.Update(id, uWallet);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Log the error and return an appropriate response
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
 
 
         [HttpDelete("{id}")]
@@ -133,6 +182,42 @@ namespace CryptoCurrency.Controllers
                 _walletService.Delete(id);
                 return NoContent();
             }
+
+        [HttpPut("{id}")]
+
+        public IActionResult UpdateWallet(int id, [FromBody] updateWallet update)
+        {
+            if (update == null)
+            {
+                return BadRequest();
+            }
+
+            var wallet = _walletService.GetById(id);
+
+            if (wallet == null)
+            {
+                return NotFound();
+            }
+
+            //_mapper.Map(coin, coinDto);
+            // Update the coin object with values from the DTO
+            wallet.UserId = update.UserId;
+            wallet.Balance = update.Balance;    
+            
+
+
+            var updated = _walletService.UpdateWallet(id, update);
+
+            if (!updated)
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return Ok();
+        }
+
+
+
     }
 
 
