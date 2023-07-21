@@ -1,4 +1,5 @@
 ﻿using CryptoCurrency.Models;
+using CryptoCurrency.Dto;
 
 namespace CryptoCurrency.Interfaces
 {
@@ -19,6 +20,15 @@ namespace CryptoCurrency.Interfaces
             void DeleteUser(User userobj);
             User Authenticate(string email, string password);
             IEnumerable<Transaction> GetUserTransactions(int userId);
+
+        //User GetUserWithTransactionsAndWallet(int userId);
+        IEnumerable<User> GetUsersWithTransactionsAndWallets();
+
+        User GetUserByEmail(string email);
+        User GetUserByName(string firstName,string lastName );
+
+           //UserDto1 MapUserToDto(User user);
+
 
 
 

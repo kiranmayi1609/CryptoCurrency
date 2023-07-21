@@ -15,4 +15,15 @@ namespace CryptoCurrency.Dto
         public int UserId { get; set; }
         public DateTime Date { get; set; }
     }
+
+    public class TransactionDto1
+    {
+        public int transactionId { get; set; }
+        
+        //Navigation property for user 
+        public DateTime Date { get; set; }
+    }
+
+
+
 }

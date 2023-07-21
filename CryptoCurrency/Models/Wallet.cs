@@ -9,4 +9,5 @@
         //Navigation property for user 
         public User User { get; set; }
     }
+
 }

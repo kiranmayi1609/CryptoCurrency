@@ -10,4 +10,17 @@
         //public string Username { get; set; }
         public string Password { get; set; }
     }
+
+
+    public class UserDto1
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+
+        public ICollection<TransactionDto> Transactions { get; set; }
+        public WalletDto Wallet { get; set; }
+        // other properties as needed
+    }
 }
