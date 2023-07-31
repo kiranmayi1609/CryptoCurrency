@@ -269,6 +269,7 @@ namespace CryptoCurrency.Controllers
             // Remove the password from the user object to avoid exposing it
             user.Password = null;
             return Ok(new { message = "", user = user });
+           
         }
 
     }
