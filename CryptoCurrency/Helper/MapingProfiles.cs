@@ -24,6 +24,8 @@ namespace CryptoCurrency.Helper
             CreateMap<WalletDto, Wallet>();
             CreateMap<Wallet, WalletDto>();
             CreateMap<Transaction, TransactionDto>();
+            CreateMap<Transaction,TransactionDto1>();
+            
 
 
 

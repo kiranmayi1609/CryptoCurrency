@@ -72,31 +72,6 @@ namespace CryptoCurrency.Controllers
         }
 
 
-        
-
-
-
-
-        //[HttpPut("{id}")]
-        //public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction uTransaction)
-        //{
-        //    if (uTransaction == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    try
-        //    {
-        //        _transactionservice.UpdateTransaction(id, uTransaction);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the error and return an appropriate response
-        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        //    }
-        //}
-
         [HttpPut("{id}")]
         public IActionResult UpdateTransaction(int id, [FromBody] updateTransaction update)
         {
@@ -112,11 +87,9 @@ namespace CryptoCurrency.Controllers
                 return NotFound();
             }
 
-            //_mapper.Map(coin, coinDto);
-            // Update the coin object with values from the DTO
             tr.UserId = update.UserId;
             tr.Date = update.Date;
-            
+
 
 
             var updated = _transactionservice.UpdateTransaction(id, update);
@@ -129,6 +102,9 @@ namespace CryptoCurrency.Controllers
             return Ok();
         }
 
+
+       
+
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
@@ -140,6 +116,20 @@ namespace CryptoCurrency.Controllers
             _transactionservice.Delete(id);
             return NoContent();
         }
+
+        [HttpGet("{userId}/transactions")]
+        public ActionResult<IEnumerable<TransactionDto>> GetUserTransactions(int userId)
+        {
+            var transactions = _transactionservice.GetUserTransactions(userId);
+            if (transactions == null || !transactions.Any())
+            {
+                return NotFound("No transactions found for the specified user.");
+            }
+
+            var transactionDtos = _mapper.Map<IEnumerable<TransactionDto1>>(transactions);
+            return Ok(transactionDtos);
+        }
+
 
 
 

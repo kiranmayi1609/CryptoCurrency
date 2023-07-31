@@ -16,6 +16,7 @@ builder.Services.AddScoped<ITransaction, TransactionRepository>();
 builder.Services.AddScoped <IPrice, PriceRepository>();
 builder.Services.AddScoped<IUser, UserRepository>();
 builder.Services.AddScoped<IWallet, WalletRepository>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

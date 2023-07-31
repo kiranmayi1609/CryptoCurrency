@@ -2,6 +2,7 @@
 using CryptoCurrency.Dto;
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CryptoCurrency.Repositories
 {
@@ -20,13 +21,7 @@ namespace CryptoCurrency.Repositories
 
         public bool AddTransaction(Transaction transaction)
         {
-            //var transactionEntity=_dbContext. transactions.Where(a=> a.Id==transaction.Id).FirstOrDefault();
-            //var transactionCoin = new TransactionCoin()
-            //{
-            //    Transaction = transactionCoinEntity,
-            //    Coin = coin,
-
-            //};
+            
             var result = 0;
             Transaction s = _dbContext.transactions.Where(c => c.Id == transaction.Id).FirstOrDefault();
             if (s != null)
@@ -49,12 +44,7 @@ namespace CryptoCurrency.Repositories
 
         }
 
-        //public void AddTransaction(Transaction transaction)
-        //{
-        //    _dbContext.transactions.Add(transaction);
-        //    _dbContext.SaveChanges();
-        //}
-
+        
         public Transaction GetTransaction(int id)
         {
             return _dbContext.transactions.Where(t => t.Id == id).FirstOrDefault();
@@ -71,28 +61,9 @@ namespace CryptoCurrency.Repositories
            return _dbContext.transactionCoins.Where(tc=>tc.TransactionId==transactionID).Select(c=>c.Coin).ToList();
         }
 
-      
-
-        //public void UpdateTransaction(Transaction transaction)
-        //{
-        //    _dbContext.transactions.Update(transaction);
-        //    _dbContext.SaveChanges();
-        //}
-
-        //public void UpdateTransaction(int id,  updateTransaction uTransaction)
-        //{
-        //    var transaction = _dbContext.transactions.FirstOrDefault(x => x.Id == id);
-        //    if(transaction != null)
-        //    {
-        //        transaction.UserId = uTransaction.UserId;
-        //        transaction.Date = uTransaction.Date;
-        //        _dbContext.SaveChanges();
-
-        //    }
-            
+        
 
 
-        //}
 
         public bool UpdateTransaction(int id, updateTransaction update)
         {
@@ -121,6 +92,23 @@ namespace CryptoCurrency.Repositories
             var transaction= GetTransaction(id);
             _dbContext.transactions.Remove(transaction);
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<Transaction> GetUserTransactions(int userId)
+        {
+            var transactions = _dbContext.transactions
+            .Where(t => t.UserId == userId)
+            .ToList();
+
+            return transactions;
+        }
+
+        public IEnumerable<TransactionCoin> GetTransactionCoins(IEnumerable<int> transactionIds)
+        {
+            return  _dbContext.transactionCoins
+        .Where(tc => transactionIds.Contains(tc.TransactionId))
+        .Include(tc => tc.Coin)
+        .ToList();
         }
     }
 }

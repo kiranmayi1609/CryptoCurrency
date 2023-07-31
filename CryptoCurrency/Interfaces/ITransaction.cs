@@ -7,6 +7,8 @@ namespace CryptoCurrency.Interfaces
     {
         ICollection<Transaction>GetTransactions();
         Transaction GetTransaction(int id);
+
+        IEnumerable<TransactionCoin> GetTransactionCoins(IEnumerable<int> transactionIds);
         ICollection<Coin> GetTransactionsByCoins(int transactionID);
 
         bool AddTransaction(Transaction transaction);
@@ -16,6 +18,8 @@ namespace CryptoCurrency.Interfaces
         bool TransactionExists (int Id);
 
         void Delete(int id);
+
+        IEnumerable<Transaction> GetUserTransactions(int userId);
         //void AddTransaction(Transaction transaction);
         //void UpdateTransaction(int id, updateTransaction uTransaction);
     }
