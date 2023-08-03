@@ -69,7 +69,7 @@ namespace CryptoCurrency.Repositories
         {
             var transaction = _dbContext.transactions.Find(id);
 
-            //var coins = _dbContext.coin.Find(id);
+            
             if (transaction != null)
             {
                 transaction.UserId = update.UserId;
@@ -109,6 +109,7 @@ namespace CryptoCurrency.Repositories
         .Where(tc => transactionIds.Contains(tc.TransactionId))
         .Include(tc => tc.Coin)
         .ToList();
+            
         }
     }
 }
