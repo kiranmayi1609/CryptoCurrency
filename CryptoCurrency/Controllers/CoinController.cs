@@ -104,7 +104,7 @@ namespace CryptoCurrency.Controllers
                 return NotFound();
             }
 
-            //_mapper.Map(coin, coinDto);
+           
             // Update the coin object with values from the DTO
             coin.Name = update.Name;
             coin.Symbol = update.Symbol;

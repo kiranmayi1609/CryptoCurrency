@@ -5,6 +5,7 @@ using CryptoCurrency.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace CryptoCurrency.Controllers
 {
     [Route("api/[controller]")]
@@ -16,6 +17,7 @@ namespace CryptoCurrency.Controllers
         private readonly ICoin _coin;
         private readonly IWallet _wallet;
         private readonly IMapper _mapper;
+
 
         public UserController(IUser userservice, IMapper mapper, ITransaction transervice, ICoin coinservice, IWallet walletservice)
         {
@@ -30,7 +32,7 @@ namespace CryptoCurrency.Controllers
         public IActionResult Get()
         {
             var users = _userService.GetUsersWithTransactionsAndWallets();
-            //var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
+            
             var userList = users.Select(user => new
             {
                 user.Id,
@@ -131,43 +133,12 @@ namespace CryptoCurrency.Controllers
             }
 
 
-            //var response = new
-            //{
-            //    FirstName = user.FirstName,
-            //    LastName = user.LastName,
-            //    Transactions = user.Transactions,
-            //    Wallets = user.Wallets
-            //};
-            // Set session variable to mark user as authenticated
-            //HttpContext.Session.SetInt32("UserId", user.Id);
-
-            // Remove the password from the user object to avoid exposing it
-            //user.Password = null;
+            
             return Ok(user);
 
         }
 
-        //[HttpPost("register")]
-        //public IActionResult Register([FromBody] UserDto userDto)
-        //{
-        //    if (userDto == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var user = _mapper.Map<User>(userDto);
-
-        //    // You may want to validate the user input before creating a new user
-
-        //    _userService.CreateUser(user);
-
-        //    // Remove the password from the user object to avoid exposing it
-        //    user.Password = null;
-        //    return Ok(new { message = "", user = user });
-
-
-
-        //}
+        
 
        [HttpGet("{userId}/transaction")]
        public IActionResult GetUserTransactions(int userId)
@@ -175,68 +146,6 @@ namespace CryptoCurrency.Controllers
             var transaction = _userService.GetUserTransactions(userId);
             return Ok(transaction);
         }
-
-        //[HttpGet("{userId}/transactions")]
-        //public ActionResult<IEnumerable<TransactionDto>> GetUserTransactions(int userId)
-        //{
-        //    var transactions = _userService.GetUserTransactions(userId);
-        //    if (transactions == null || !transactions.Any())
-        //    {
-        //        return NotFound("No transactions found for the specified user.");
-        //    }
-        //    var transactionDtos = _mapper.Map<IEnumerable<TransactionDto1>>(transactions);
-        //    return Ok(transactionDtos);
-        //}
-
-
-        //[HttpGet("{userId}/transaction/wallet")]
-        //public IActionResult GetUserTransactionsAndWallets(int userId)
-        //{
-        //    var user = _userService.GetUserWithTransactionsAndWallet(userId);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var transactionIds=user.Transactions.Select(x => x.Id).ToList();
-        //    var walletBalances =user.Wallets.ToDictionary(w=>w.Id,w=>w.Balance);
-
-        //    var coins = _transaction.GetTransactionCoins(transactionIds).Select(tc=> new
-        //    {
-        //        TransactionIds = tc.TransactionId,
-        //        CoinId = tc.CoinID,
-        //        CoinName = tc.Coin.Name
-
-        //        //include other coin properties 
-
-        //    }).ToList();
-
-        //    //prepare the reponse object with the user's data 
-
-        //    var response = new
-        //    {
-        //        UserId = userId,
-        //        FirstName = user.FirstName,
-        //        LastName = user.LastName,
-        //        Transactions = transactionIds.Select(transactionId => new
-        //        {
-        //            TransactionIds = transactionId,
-        //            walletBalance = walletBalances.ContainsKey(transactionId) ? walletBalances[transactionId] : 0,
-        //            Coins = coins.Where(c => c.TransactionIds == transactionId)
-        //        })
-        //    };
-
-        //   return Ok(response);
-
-        //}
-        //[HttpGet]
-        //public IActionResult GetUsersWithTransactionsAndWallets()
-        //{
-        //    var users = _userService.GetUsersWithTransactionsAndWallets();
-        //    var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
-
-        //    return Ok(userDtos);
-        //}
-
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] UserDto userDto)
@@ -259,6 +168,22 @@ namespace CryptoCurrency.Controllers
             {
                 return BadRequest(new { message = "User with the same name already exists" });
             }
+
+            // Validate the email
+            if (!_userService.IsEmailValid(userDto.Email))
+            {
+                return BadRequest(new { message = "Invalid email format. Please provide a valid email address." });
+            }
+
+
+
+            // Validate the password using the UserRepository's IsPasswordValid method
+            if (!_userService.IsPasswordValid(userDto.Password))
+            {
+                return BadRequest(new { message = "Password does not meet the requirements. It should have at least 5 characters, including uppercase, lowercase, and a digit." });
+            }
+
+
 
             var user = _mapper.Map<User>(userDto);
 
@@ -305,16 +230,5 @@ namespace CryptoCurrency.Controllers
         //    return Ok(user);
         //}
 
-        //[HttpGet("{userId}/transactions")]
-        //public IActionResult GetUserTransactions(int userId)
-        //{
-        //    var transactions = _userService.GetUserTransactions(userId);
-
-        //    if (transactions == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(transactions);
-        //}
+        
         

@@ -21,7 +21,7 @@ namespace CryptoCurrency.Repositories
             Price p = _dbContext.prices.Where(c => c.Id == price.Id).FirstOrDefault();
             if (p!= null)
             {
-                //p.Id = price.Id;
+                
                 p.CoinId = price.CoinId;
                 p.Value = price.Value;
                 result = _dbContext.SaveChanges();
@@ -36,8 +36,6 @@ namespace CryptoCurrency.Repositories
 
 
             return result > 0;
-            //_dbContext.prices.Add(price);
-            //return true;
             
            
         }

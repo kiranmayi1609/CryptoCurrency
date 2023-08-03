@@ -3,6 +3,7 @@ using CryptoCurrency.Dto;
 using CryptoCurrency.Interfaces;
 using CryptoCurrency.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace CryptoCurrency.Repositories
 {
@@ -17,48 +18,7 @@ namespace CryptoCurrency.Repositories
             }
 
 
-        //    public ICollection<User> GetUsers()
-        //    {
-        //        return _Context.users.ToList();
-        //    }
-
-        //    public User GetUser(int id)
-        //    {
-        //        return _Context.users.FirstOrDefault(u => u.Id == id);
-        //    }
-
-        //    public bool UserExists(int id)
-        //    {
-        //        return _Context.users.Any(u => u.Id == id);
-        //    }
-
-        //    public bool CreateUser(User userobj)
-        //    {
-        //        _Context.Add(userobj);
-        //        return Save();
-        //    }
-
-        //    public bool UpdateUser(User userobj)
-        //    {
-        //        _Context.users.Update(userobj);
-        //        return Save();
-        //    }
-
-        //    public bool DeleteUser(User userobj)
-        //    {
-        //        _Context.users.Remove(userobj);
-        //        return Save();
-        //    }
-
-        //    public bool Save()
-        //    {
-        //        return _Context.SaveChanges() >= 0;
-        //    }
-
-        //public bool Authenticate(string Email, string Password)
-        //{
-        //    return _Context.users.Any(u => u.Email == Email && u.Password == Password);
-        //}
+       
 
 
         public ICollection<User> GetUsers()
@@ -94,9 +54,11 @@ namespace CryptoCurrency.Repositories
 
         public User Authenticate(string email, string password)
         {
-            //var user = _Context.users.Include(u=>u.Transactions)
-            //                         .Include(u=>u.Wallets)
-            //                         .FirstOrDefault(u => u.Email == email && u.Password == password);
+            // Check if the password meets the requirements
+            if (!IsPasswordValid(password))
+            {
+                return null;
+            }
 
 
             var user = _Context.users.FirstOrDefault(u => u.Email == email && u.Password == password);
@@ -111,26 +73,7 @@ namespace CryptoCurrency.Repositories
             return user;
         }
 
-       
-
-        //public IEnumerable<Transaction> GetUserTransactions(int userId)
-        //{
-        //    var query = from u in _Context.users
-        //                join ut in _Context.transactions on u.Id equals ut.UserId
-        //                join uw in _Context.wallets on u.Id equals uw.UserId
-        //                where u.Id == userId
-        //                select ut;
-
-        //    return query.ToList();
-        //}
-
-        //public User GetUserWithTransactionsAndWallet(int userId)
-        //{
-        //    return _Context.users
-        //        .Include(u=>u.Transactions)
-        //        .Include(u=>u.Wallets)
-        //        .FirstOrDefault(u=>u.Id== userId);
-        //}
+      
 
         public IEnumerable<Transaction> GetUserTransactions(int userId)
         {
@@ -152,52 +95,54 @@ namespace CryptoCurrency.Repositories
 
         public IEnumerable<User> GetUsersWithTransactionsAndWallets()
         {
-            //throw new NotImplementedException();
-            //return _Context.users.Include(u=>u.Transactions)
-            //     .Include(u=>u.Wallets).ToList();
-            //return _Context.users.
-            //    Join(_Context.transactions,u=>u.Id,t=>t.UserId,(u,t)=> new { User =u, Transaction=t })
-            //    .Join(_Context.wallets,ut=>ut.User.Id,w=>w.UserId,(ut,w)=> new {ut.User,ut.Transaction,Wallet=w})
-            //    .GroupBy(utw=>utw.User.Id)
-            //    .Select(utwGroup=>new User
-            //    {
-            //        Id=utwGroup.Key,
-            //        FirstName=utwGroup.First().User.FirstName,
-            //        LastName=utwGroup.First().User.LastName,
-            //        Email=utwGroup.First().User.Email,
-            //Transactions=utwGroup.Select(utw => utw.Transaction).ToList(),
-            //Wallets=utwGroup.Select(utw => utw.Wallet).ToList()
-            //Transactions=utwGroup.Select(utw => new Transaction
-            //{
-            //    Id=utw.Transaction.Id,
-            //    Date=utw.Transaction.Date
-            //}).ToList(),
-            //Wallets=utwGroup.Select(utw => new Wallet
-            //{
-            //    Id=utw.Wallet.Id,
-            //    Balance=utw.Wallet.Balance,
-            //}).ToList(),
-            //}).ToList();
-
-            //      return _Context.users
-            //.Join(_Context.transactions, u => u.Id, t => t.UserId, (u, t) => new { User = u, Transaction = t })
-            //.Join(_Context.wallets, ut => ut.User.Id, w => w.UserId, (ut, w) => new { ut.User, ut.Transaction, Wallet = w })
-            //.Select(utw => new User
-            //{
-            //    Id = utw.User.Id,
-            //    FirstName = utw.User.FirstName,
-            //    LastName = utw.User.LastName,
-            //    Email = utw.User.Email,
-            //    Transactions = new List<Transaction> { utw.Transaction },
-            //    Wallets = new List<Wallet> { utw.Wallet }
-            //})
-            //.ToList();
 
             return _Context.users
        .Include(u => u.Transactions)
        .Include(u => u.Wallets)
        .ToList();
 
+        }
+
+        public  bool IsPasswordValid(string password)
+        {
+            // Define your password requirements here
+            int minimumLength = 5;
+            bool hasUppercase = false;
+            bool hasLowercase = false;
+            bool hasDigit = false;
+
+            if (string.IsNullOrEmpty(password) || password.Length < minimumLength)
+            {
+                return false;
+            }
+
+            foreach (char c in password)
+            {
+                if (char.IsUpper(c))
+                {
+                    hasUppercase = true;
+                }
+                else if (char.IsLower(c))
+                {
+                    hasLowercase = true;
+                }
+                else if (char.IsDigit(c))
+                {
+                    hasDigit = true;
+                }
+            }
+
+            return hasUppercase && hasLowercase && hasDigit;
+        
+
+        }
+
+        public bool IsEmailValid(string email)
+        {
+            // You can use a regular expression to validate the email format
+            // Here's a simple example, but you can adjust the regex pattern as needed
+            string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(email, emailPattern);
         }
     }
 }

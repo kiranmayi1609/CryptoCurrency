@@ -42,30 +42,7 @@ namespace CryptoCurrency.Controllers
                 return Ok(walletDtos);
             }
 
-            [HttpPost]
-        //public ActionResult<WalletDto> Create(WalletDto walletCreateDto)
-        //{
-        //    var wallet = _mapper.Map<Wallet>(walletCreateDto);
-        //    _walletService.Create(wallet);
-        //    var walletDto = _mapper.Map<WalletDto>(wallet);
-        //    return CreatedAtAction(nameof(GetById), new { id = walletDto.Id }, walletDto);
-        //}
-
-        //public ActionResult<WalletDto> Create(WalletDto walletCreateDto)
-        //{
-        //    try
-        //    {
-        //        var wallet = _mapper.Map<Wallet>(walletCreateDto);
-        //        _walletService.Create(wallet);
-        //        var walletDto = _mapper.Map<Wallet>(wallet);
-        //        return CreatedAtAction(nameof(GetById), new { id = walletDto.Id }, walletDto);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"An error occurred while creating the wallet: {ex.Message}");
-        //    }
-        //}
-
+            
 
 
 
@@ -87,89 +64,8 @@ namespace CryptoCurrency.Controllers
             return CreatedAtAction(nameof(GetAll), new { walletId = wallet.Id }, wallet);
         }
 
-        //[HttpPut("{id}")]
-        //    public ActionResult<WalletDto> Update(int id, WalletDto walletUpdateDto)
-        //    {
-        //        var wallet = _walletService.GetById(id);
-        //        if (wallet == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        _mapper.Map(walletUpdateDto, wallet);
-        //        _walletService.Update(wallet);
-        //        var walletDto = _mapper.Map<WalletDto>(wallet);
-        //        return Ok(walletDto);
-        //    }
-
-
-
-        //public IActionResult UpdateWallet(int id, [FromBody] updateWallet uWallet)
-        //{
-        //    if(id!=uWallet.UserId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    try
-        //    {
-        //        var wallet =_walletService.GetById(id);
-        //        if(wallet==null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        //update the wallet properties 
-        //        wallet.UserId=uWallet.UserId;
-        //        wallet.Balance=uWallet.Balance;
-
-        //        _walletService.Update(wallet);
-        //        return Ok();
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        //    }
-
-        //    //if (id! == uWallet.UserId)
-        //    //{
-        //    //    return BadRequest();
-        //    //}
-
-        //    //try
-        //    //{
-        //    //    _walletService.Update(id, uWallet);
-        //    //    return Ok();
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    // Log the error and return an appropriate response
-        //    //    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        //    //}
-
-        //    // Update the wallet
-
-        //}
-
-
-        //[HttpPut("{id}")]
-        //public IActionResult UpdateTransaction(int id, [FromBody] updateWallet uWallet)
-        //{
-        //    if (uWallet == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    try
-        //    {
-        //        _walletService.Update(id, uWallet);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the error and return an appropriate response
-        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        //    }
-        //}
-
+        
+        
 
         [HttpDelete("{id}")]
             public ActionResult Delete(int id)
