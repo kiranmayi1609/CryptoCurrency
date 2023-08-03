@@ -109,6 +109,7 @@ namespace CryptoCurrency.Repositories
         .Where(tc => transactionIds.Contains(tc.TransactionId))
         .Include(tc => tc.Coin)
         .ToList();
+            
         }
     }
 }
